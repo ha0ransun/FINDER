@@ -21,6 +21,7 @@ import nstep_replay_mem_prioritized
 import mvc_env
 import utils
 import os
+import argparse
 
 # Hyper Parameters:
 cdef double GAMMA = 1  # decay rate of past observations
@@ -53,6 +54,10 @@ cdef int aggregatorID = 0 #0:sum; 1:mean; 2:GCN
 cdef int embeddingMethod = 1   #0:structure2vec; 1:graphsage
 
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--g_type', type=str, default='barabasi_albert', choices=['barabasi_albert', 'erdos_renyi', 'smlaa-world'])
+parser.add_argument('--training_type', type=str, default='random', choices=['random', 'degree'])
+args = parser.parse_args()
 
 class FINDER:
 
@@ -60,7 +65,7 @@ class FINDER:
         # init some parameters
         self.embedding_size = EMBEDDING_SIZE
         self.learning_rate = LEARNING_RATE
-        self.g_type = 'barabasi_albert' #erdos_renyi, powerlaw, small-world
+        self.g_type = args.g_type #erdos_renyi, powerlaw, small-world
         self.TrainSet = graph.py_GSet()
         self.TestSet = graph.py_GSet()
         self.inputs = dict()
@@ -638,7 +643,7 @@ class FINDER:
                 N_end = time.clock()
                 print ('300 iterations total time: %.2fs\n'%(N_end-N_start))
                 sys.stdout.flush()
-                model_path = '%s/nrange_%d_%d_iter_%d.ckpt' % (save_dir, NUM_MIN, NUM_MAX, iter)
+                model_path = '%s/nrange_%d_%d_iter_%d_%s.ckpt' % (save_dir, NUM_MIN, NUM_MAX, iter, self.g_type)
                 self.SaveModel(model_path)
             if iter % UPDATE_TIME == 0:
                 self.TakeSnapShot()
@@ -654,7 +659,7 @@ class FINDER:
         start_loc = 33
         min_vc = start_loc + np.argmin(vc_list[start_loc:])
         best_model_iter = 300 * min_vc
-        best_model = './models/%s/nrange_%d_%d_iter_%d.ckpt' % (self.g_type, NUM_MIN, NUM_MAX, best_model_iter)
+        best_model = './models/%s/nrange_%d_%d_iter_%d_%s.ckpt' % (self.g_type, NUM_MIN, NUM_MAX, best_model_iter, self.g_type)
         return best_model
 
 
