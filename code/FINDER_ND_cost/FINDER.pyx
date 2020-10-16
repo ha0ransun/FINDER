@@ -886,7 +886,7 @@ class FINDER:
         edges = g.edges()
         weights = []
         for i in range(len(nodes)):
-            weights.append(g.node[i]['weight'])
+            weights.append(g.nodes[str(i)]['weight'])
         if len(edges) > 0:
             a, b = zip(*edges)
             A = np.array(a)
