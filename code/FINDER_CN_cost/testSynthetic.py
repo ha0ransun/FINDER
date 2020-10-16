@@ -18,6 +18,8 @@ def main():
             model_file = f'./models/Model_{graph_type}/nrange_30_50_iter_99900_{graph_type}_{cost}.ckpt'
 
             file_path = '../../results/FINDER_CN_cost/synthetic'
+            if not os.path.exists('../../results'):
+                os.mkdir('../../results')
             if not os.path.exists('../../results/FINDER_CN_cost'):
                 os.mkdir('../../results/FINDER_CN_cost')
             if not os.path.exists('../../results/FINDER_CN_cost/synthetic'):
