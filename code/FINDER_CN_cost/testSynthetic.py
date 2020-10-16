@@ -20,7 +20,7 @@ def main():
             file_path = '../../results/FINDER_CN_cost/synthetic'
             if not os.path.exists('../../results/FINDER_CN_cost'):
                 os.mkdir('../../results/FINDER_CN_cost')
-            if not os.path.exists('../results/FINDER_CN_cost/synthetic'):
+            if not os.path.exists('../../results/FINDER_CN_cost/synthetic'):
                 os.mkdir('../../results/FINDER_CN_cost/synthetic')
 
             with open('%s/%s_%s_score.txt'%(file_path, graph_type, cost), 'w') as fout:
