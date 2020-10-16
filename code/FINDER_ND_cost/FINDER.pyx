@@ -62,7 +62,7 @@ cdef int embeddingMethod = 1   #0:structure2vec; 1:graphsage
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--g_type', type=str, default='barabasi_albert', choices=['barabasi_albert', 'erdos_renyi', 'small-world'])
-parser.add_argument('--training_type', type=str, default='random', choices=['random', 'degree'])
+parser.add_argument('--training_type', type=str, default='random', choices=['uniform', 'random', 'degree'])
 args = parser.parse_args()
 
 class FINDER:
