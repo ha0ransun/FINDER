@@ -10,7 +10,7 @@ from tqdm import tqdm
 def main():
     dqn = FINDER()
     graph_types = ['barabasi_albert', 'erdos_renyi', 'small-world']
-    cost_types = ['degree_cost', 'random_cost']
+    cost_types = ['degree', 'random']
     for graph_type in graph_types:
         for cost in cost_types:
             data_test_path = '../../data/synthetic/%s/%s'.format(graph_type, cost)
