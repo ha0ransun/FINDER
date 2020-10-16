@@ -31,7 +31,7 @@ def main():
                     score_mean, score_std, time_mean, time_std = dqn.Evaluate(data_test, model_file)
                     fout.write('%.2f±%.2f,' % (score_mean * 100, score_std * 100))
                     fout.flush()
-                    print('data_test_%s_%s has been tested!'.format(graph_type,data_test_name[i]))
+                    print('data_test_%s has been tested!'.format(data_test_name[i]))
 
 
 if __name__=="__main__":
