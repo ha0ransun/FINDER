@@ -15,7 +15,7 @@ def main():
         for cost in cost_types:
             data_test_path = '../../data/synthetic/%s/%s'.format(graph_type, cost)
             data_test_name = ['30-50', '50-100', '100-200'] #, '200-300', '300-400', '400-500']
-            model_file = './models/nrange_30_50_iter_93300.ckpt'
+            model_file = f'./models/Model_{graph_type}/nrange_30_50_iter_{graph_type}_{cost}_99900.ckpt'
 
             file_path = '../../results/FINDER_CN_cost/synthetic'
             if not os.path.exists('../../results/FINDER_CN_cost'):
