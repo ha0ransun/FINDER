@@ -24,7 +24,7 @@ def gen_graph(num_min, num_max, g_type, path, i, n_type='uniform'):
             maxDegree = max(dict(degree).values())
             weights = {}
             for node in g.nodes():
-                weights[node] = degree[node]
+                weights[node] = degree[node] / maxDegree
         nx.set_node_attributes(g, weights, 'weight')
 
     path = '%s/%s-%s' % (path, str(num_min), str(num_max))
