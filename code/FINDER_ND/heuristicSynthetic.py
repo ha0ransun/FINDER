@@ -12,7 +12,7 @@ def main():
     graph_types = ['barabasi_albert']
     cost_types = ['uniform']
     heur_types = ['HDA', 'HBA', 'HCA', 'HPRA']
-    file_path = '../../results/FINDER_CN/synthetic'
+    file_path = '../../results/FINDER_ND/synthetic'
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 

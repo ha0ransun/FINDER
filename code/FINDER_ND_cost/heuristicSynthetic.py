@@ -10,9 +10,9 @@ from tqdm import tqdm
 def main():
     dqn = FINDER()
     graph_types = ['barabasi_albert']
-    cost_types = ['uniform']
+    cost_types = ['degree', 'random']
     heur_types = ['HDA', 'HBA', 'HCA', 'HPRA']
-    file_path = '../../results/FINDER_CN/synthetic'
+    file_path = '../../results/FINDER_ND_cost/synthetic'
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 

@@ -746,6 +746,31 @@ class FINDER:
         time_std = np.std(result_list_time)
         return  score_mean, score_std, time_mean, time_std
 
+    def EvaluateHeuristics(self, data_test, method='HDA'):
+        print ('Evaluate basline :%s'%(method))
+        sys.stdout.flush()
+        cdef int n_test = 100
+        cdef int i
+        result_list_score = []
+        result_list_time = []
+        sys.stdout.flush()
+        for i in tqdm(range(n_test)):
+            g_path = '%s/'%data_test + 'g_%d'%i
+            g = nx.read_gml(g_path)
+            self.InsertGraph(g, is_test=True)
+            t1 = time.time()
+            val, sol = self.HXA(g, method)
+            # val, sol = self.GetSol(i)
+            t2 = time.time()
+            result_list_score.append(val)
+            result_list_time.append(t2-t1)
+        self.ClearTestGraphs()
+        score_mean = np.mean(result_list_score)
+        score_std = np.std(result_list_score)
+        time_mean = np.mean(result_list_time)
+        time_std = np.std(result_list_time)
+        return  score_mean, score_std, time_mean, time_std
+
 
     def EvaluateRealData(self, model_file, data_test, save_dir, stepRatio=0.0025):  #测试真实数据
         cdef double solution_time = 0.0
