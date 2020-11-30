@@ -27,7 +27,7 @@ def main():
                         data_test = data_test_path + data_test_name[i]
                         score_mean, score_std, time_mean, time_std = dqn.EvaluateHeuristics(data_test, heur)
                         fout.write('%.2f±%.2f,' % (score_mean * 100, score_std * 100))
-                        fout.write('%.2f±%.2f,' % (time_mean, time_std))
+                        fout.write('%.2f±%.2f\n' % (time_mean, time_std))
                         fout.flush()
                         print(100 * '#')
                         print('data_test_{} has been tested!'.format(data_test_name[i]))
