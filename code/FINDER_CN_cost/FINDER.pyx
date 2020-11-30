@@ -1081,7 +1081,7 @@ class FINDER:
             return False
 
     def HXA(self, g, method):
-        # 'HDA', 'HBA', 'HPRA', 'HCA'
+        # 'HDA', 'HBA', 'HPRA', ''
         sol = []
         G = g.copy()
         while (nx.number_of_edges(G)>0):
@@ -1097,12 +1097,12 @@ class FINDER:
             values = list(dc.values())
             maxTag = np.argmax(values)
             node = keys[maxTag]
-            sol.append(node)
+            sol.append(int(node))
             G.remove_node(node)
         solution = sol + list(set(g.nodes())^set(sol))
         solutions = [int(i) for i in solution]
         Robustness = self.utils.getRobustness(self.GenNetwork(g), solutions)
-        return Robustness
+        return Robustness, sol
 
     def Real2networkx(self, G):
         cc = sorted(nx.connected_components(G), key=len, reverse=True)
