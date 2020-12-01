@@ -687,7 +687,9 @@ class FINDER:
                 f_out.write(' %d\n' % sol[i])
             frac1 += val
             frac_time1 += (t2 - t1)
-            
+        print('average size of vc for rl: ', frac1)
+        print('average time for rl: ', frac_time1)
+
         with open(result_file2, 'w') as f_out:
             print ('testing hxa')
             sys.stdout.flush()
@@ -699,7 +701,7 @@ class FINDER:
                 f_out.write(' %d\n' % sol[i])
             frac2 += val
             frac_time2 += (t2 - t1)
-        print ('average size of vc for hxa: ', frac2)
+        print('average size of vc for hxa: ', frac2)
         print('average time for hxa: ', frac_time2)
 
 
