@@ -932,5 +932,5 @@ class FINDER:
             G.remove_node(node)
         solution = sol + list(set(g.nodes())^set(sol))
         # solutions = [int(i) for i in solution]
-        Robustness = self.utils.getRobustness(self.GenNetwork(g), solutions)
+        Robustness = self.utils.getRobustness(self.GenNetwork(g), solution)
         return Robustness, sol
