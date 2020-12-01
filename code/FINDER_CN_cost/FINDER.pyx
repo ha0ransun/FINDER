@@ -1099,8 +1099,8 @@ class FINDER:
             node = keys[maxTag]
             sol.append(int(node))
             G.remove_node(node)
-        solution = sol + list(set(g.nodes())^set(sol))
-        solutions = [int(i) for i in solution]
+        solutions = sol + list(set([int(n) for n in g.nodes()])^set(sol))
+        # solutions = [int(i) for i in solution]
         Robustness = self.utils.getRobustness(self.GenNetwork(g), solutions)
         return Robustness, sol
 
