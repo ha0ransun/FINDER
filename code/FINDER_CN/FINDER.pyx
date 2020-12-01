@@ -726,13 +726,14 @@ class FINDER:
         for i in tqdm(range(n_test)):
             g_path = '%s/'%data_test + 'g_%d'%i
             g = nx.read_gml(g_path)
-            self.InsertGraph(g, is_test=True)
+            g_test = g.copy()
             t1 = time.time()
-            val, sol = self.HXA(g, method)
+            val, sol = self.HXA(g_test, method)
             # val, sol = self.GetSol(i)
             t2 = time.time()
             result_list_score.append(val)
             result_list_time.append(t2-t1)
+            self.InsertGraph(g, is_test=True)
         self.ClearTestGraphs()
         score_mean = np.mean(result_list_score)
         score_std = np.std(result_list_score)
