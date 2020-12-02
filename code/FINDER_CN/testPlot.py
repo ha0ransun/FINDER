@@ -27,7 +27,7 @@ def main():
                 data_test = data_test_path + data_test_name
                 g_path = '%s/'%data_test + 'g_0' # could be changed for other g_i
                 g = nx.read_gml(g_path)
-                dqn.Evaluate1(g, data_test, model_file, heur)
+                dqn.Evaluate1(g, file_path, model_file, heur)
 
 
 if __name__=="__main__":
