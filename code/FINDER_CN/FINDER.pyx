@@ -665,44 +665,41 @@ class FINDER:
         return best_model
 
     def Evaluate1(self, g, save_dir, model_file=None, method='HDA'):
-        if model_file == None:  #if user do not specify the model_file
-            model_file = self.findModel()
-        print ('The best model is :%s'%(model_file))
-        sys.stdout.flush()
-        self.LoadModel(model_file)
-        cdef double frac1 = 0.0
-        cdef double frac_time1 = 0.0
-        cdef double frac2 = 0.0
-        cdef double frac_time2 = 0.0
-        result_file1 = '%s/test_rl.csv' % (save_dir)
-        result_file2 = '%s/test_%s.csv' % (save_dir, method)
-        with open(result_file1, 'w') as f_out:
-            print ('testing rl')
+        cdef double frac = 0.0
+        cdef double frac_time = 0.0
+        result_file = '%s/test_%s.csv' % (save_dir, method)
+        if method == 'RL':
+            if model_file == None:  #if user do not specify the model_file
+                model_file = self.findModel()
+            print ('The best model is :%s'%(model_file))
             sys.stdout.flush()
-            self.InsertGraph(g, is_test=True)
-            t1 = time.time()
-            val, sol = self.GetSol(0)
-            t2 = time.time()
-            for i in range(len(sol)):
-                f_out.write(' %d\n' % sol[i])
-            frac1 += val
-            frac_time1 += (t2 - t1)
-        print('average size of vc for rl: ', frac1)
-        print('average time for rl: ', frac_time1)
-
-        with open(result_file2, 'w') as f_out:
-            print ('testing hxa')
-            sys.stdout.flush()
-            g_test = g.copy()
-            t1 = time.time()
-            val, sol = self.HXA(g_test, method)
-            t2 = time.time()
-            for i in range(len(sol)):
-                f_out.write(' %d\n' % sol[i])
-            frac2 += val
-            frac_time2 += (t2 - t1)
-        print('average size of vc for hxa: ', frac2)
-        print('average time for hxa: ', frac_time2)
+            self.LoadModel(model_file)
+            with open(result_file, 'w') as f_out:
+                print ('testing rl')
+                sys.stdout.flush()
+                self.InsertGraph(g, is_test=True)
+                t1 = time.time()
+                val, sol = self.GetSol(0)
+                t2 = time.time()
+                solutions = sol + list(set([int(n) for n in g.nodes()])^set(sol))
+                for i in range(len(sol)):
+                    f_out.write(' %d\n' % solutions[i])
+                frac += val
+                frac_time += (t2 - t1)
+        else:
+            with open(result_file, 'w') as f_out:
+                print ('testing hxa')
+                sys.stdout.flush()
+                g_test = g.copy()
+                t1 = time.time()
+                val, sol = self.HXA(g_test, method)
+                t2 = time.time()
+                for i in range(len(sol)):
+                    f_out.write(' %d\n' % sol[i])
+                frac += val
+                frac_time += (t2 - t1)
+        print('average size of vc for ', method, ', ', frac)
+        print('average time for hxa: ', frac_time)
 
 
     def Evaluate(self, data_test, model_file=None):
