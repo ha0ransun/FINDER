@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 import sys,os
+import networkx as nx
 sys.path.append(os.path.dirname(__file__) + os.sep + '../')
 from FINDER import FINDER
 from tqdm import tqdm
