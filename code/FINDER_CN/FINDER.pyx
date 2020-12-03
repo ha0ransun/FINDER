@@ -686,7 +686,6 @@ class FINDER:
                     f_out.write(' %d\n' % solutions[i])
                 frac += val
                 frac_time += (t2 - t1)
-            self.ClearTestGraphs()
         else:
             with open(result_file, 'w') as f_out:
                 print ('testing hxa')
@@ -781,8 +780,11 @@ class FINDER:
             solution_time = (t2 - t1)
             for i in range(len(solution)):
                 f_out.write('%d\n' % solution[i])
+
+            solutions = solution + list(set([int(n) for n in g.nodes()])^set(solution))
+            Robustness = self.utils.getRobustness(self.GenNetwork(g), solutions)
         self.ClearTestGraphs()
-        return solution, solution_time
+        return solution, solution_time, Robustness
 
 
     def GetSolution(self, int gid, int step=1):

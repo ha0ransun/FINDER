@@ -31,13 +31,15 @@ def GetSolution(STEPRATIO, MODEL_FILE_CKPT):
     for j in range(len(data_test_name)):
         print ('\nTesting dataset %s'%data_test_name[j])
         data_test = data_test_path + data_test_name[j] + '.txt'
-        solution, time = dqn.EvaluateRealData(model_file, data_test, save_dir, stepRatio)
+        solution, time, robustness = dqn.EvaluateRealData(model_file, data_test, save_dir, stepRatio)
         df.iloc[0,j] = time
-        print('Data:%s, time:%.2f'%(data_test_name[j], time))
+        df.iloc[1,j] = robustness
+        print('Data:%s, time:%.2f, score:%.2f'%(data_test_name[j], time, robustness))
     save_dir_local = save_dir + '/StepRatio_%.4f' % stepRatio
     if not os.path.exists(save_dir_local):
         os.mkdir(save_dir_local)
     df.to_csv(save_dir_local + '/sol_time.csv', encoding='utf-8', index=False)
+
 
 
 def EvaluateSolution(STEPRATIO, MODEL_FILE_CKPT, STRTEGYID):
