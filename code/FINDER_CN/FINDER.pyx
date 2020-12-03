@@ -698,8 +698,8 @@ class FINDER:
                     f_out.write(' %d\n' % sol[i])
                 frac += val
                 frac_time += (t2 - t1)
-        print('average size of vc for ', method, ', ', frac)
-        print('average time for hxa: ', frac_time)
+        print('average size of vc for ', method, ': ', frac)
+        # print('running time for ', method, ': ', frac_time)
 
 
     def Evaluate(self, data_test, model_file=None):
