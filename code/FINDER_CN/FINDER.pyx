@@ -686,6 +686,7 @@ class FINDER:
                     f_out.write(' %d\n' % solutions[i])
                 frac += val
                 frac_time += (t2 - t1)
+            self.ClearTestGraphs()
         else:
             with open(result_file, 'w') as f_out:
                 print ('testing hxa')
