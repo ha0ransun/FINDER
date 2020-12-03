@@ -13,7 +13,7 @@ def GetSolution(STEPRATIO, MODEL_FILE_CKPT):
     dqn = FINDER()
     data_test_path = '../data/real/'
 #     data_test_name = ['Crime','HI-II-14','Digg','Enron','Gnutella31','Epinions','Facebook','Youtube','Flickr']
-    data_test_name = ['Crime','HI-II-14', 'US_airports_unweighted']
+    data_test_name = ['Facebook','HI-II-14', 'US_airports_unweighted']
     model_file_path = './FINDER_CN/models/'
     model_file_ckpt = MODEL_FILE_CKPT
     model_file = model_file_path + model_file_ckpt
@@ -70,7 +70,7 @@ def EvaluateSolution(STEPRATIO, MODEL_FILE_CKPT, STRTEGYID):
 
 
 def main():
-    model_file_ckpt = 'nrange_30_50_iter_400000_barabasi_albert.ckpt'
+    model_file_ckpt = 'nrange_30_50_iter_399000_barabasi_albert.ckpt'
     GetSolution(0.01, model_file_ckpt)
     # EvaluateSolution(0.01, model_file_ckpt, 0)
 
