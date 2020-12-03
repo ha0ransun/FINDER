@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from FINDER import FINDER
+import os
 import numpy as np
 import time
 import pandas as pd
@@ -11,14 +12,14 @@ def GetSolution(STEPRATIO, MODEL_FILE_CKPT):
     ######################################################################################################################
     ##................................................Get Solution (model).....................................................
     dqn = FINDER()
-    data_test_path = '../data/real/'
+    data_test_path = '../../data/real/'
 #     data_test_name = ['Crime','HI-II-14','Digg','Enron','Gnutella31','Epinions','Facebook','Youtube','Flickr']
-    data_test_name = ['Facebook','HI-II-14', 'US_airports_unweighted']
-    model_file_path = './FINDER_CN/models/'
+    data_test_name = ['Facebook','HI-II-14'] # , 'US_airports_unweighted']
+    model_file_path = './models/Model_barabasi_albert/'
     model_file_ckpt = MODEL_FILE_CKPT
     model_file = model_file_path + model_file_ckpt
     ## save_dir
-    save_dir = '../results/FINDER_CN/real'
+    save_dir = '../../results/FINDER_CN/real'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
     ## begin computing...
@@ -43,10 +44,10 @@ def EvaluateSolution(STEPRATIO, MODEL_FILE_CKPT, STRTEGYID):
     #######################################################################################################################
     ##................................................Evaluate Solution.....................................................
     dqn = FINDER()
-    data_test_path = '../data/real/'
+    data_test_path = '../../data/real/'
 #     data_test_name = ['Crime', 'HI-II-14', 'Digg', 'Enron', 'Gnutella31', 'Epinions', 'Facebook', 'Youtube', 'Flickr']
-    data_test_name = ['Crime','HI-II-14', 'US_airports_unweighted']
-    save_dir = '../results/FINDER_CN/real/StepRatio_%.4f/'%STEPRATIO
+    data_test_name = ['Crime','HI-II-14'] # , 'US_airports_unweighted']
+    save_dir = '../../results/FINDER_CN/real/StepRatio_%.4f/'%STEPRATIO
     ## begin computing...
     df = pd.DataFrame(np.arange(2 * len(data_test_name)).reshape((2, len(data_test_name))), index=['solution', 'time'], columns=data_test_name)
     for i in range(len(data_test_name)):
