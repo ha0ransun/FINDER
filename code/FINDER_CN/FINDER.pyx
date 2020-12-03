@@ -664,10 +664,10 @@ class FINDER:
         best_model = './models/%s/nrange_%d_%d_iter_%d_%s.ckpt' % (self.g_type, NUM_MIN, NUM_MAX, best_model_iter, self.g_type)
         return best_model
 
-    def Evaluate1(self, g, save_dir, model_file=None, method='HDA'):
+    def Evaluate1(self, g, idx, save_dir, model_file=None, method='HDA'):
         cdef double frac = 0.0
         cdef double frac_time = 0.0
-        result_file = '%s/test_%s.csv' % (save_dir, method)
+        result_file = '%s/test_%d_%s.csv' % (save_dir, idx, method)
         if method == 'RL':
             if model_file == None:  #if user do not specify the model_file
                 model_file = self.findModel()
