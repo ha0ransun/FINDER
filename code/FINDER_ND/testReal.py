@@ -19,7 +19,7 @@ def GetSolution(STEPRATIO, MODEL_FILE_CKPT):
     data_test_path = '../data/real/'
 #     data_test_name = ['Crime','HI-II-14','Digg','Enron','Gnutella31','Epinions','Facebook','Youtube','Flickr']
     data_test_name = ['Crime','HI-II-14']
-    model_file_path = './FINDER_ND/models/'
+    model_file_path = './models/Model_barabasi_albert/'
     model_file_ckpt = MODEL_FILE_CKPT
     model_file = model_file_path + model_file_ckpt
     ## save_dir
@@ -30,16 +30,17 @@ def GetSolution(STEPRATIO, MODEL_FILE_CKPT):
     ## begin computing...
     print ('The best model is :%s'%(model_file))
     dqn.LoadModel(model_file)
-    df = pd.DataFrame(np.arange(1*len(data_test_name)).reshape((1,len(data_test_name))),index=['time'], columns=data_test_name)
+    df = pd.DataFrame(np.arange(2*len(data_test_name)).reshape((-1,len(data_test_name))),index=['time', 'score'], columns=data_test_name)
     #################################### modify to choose which stepRatio to get the solution
     stepRatio = STEPRATIO
 
     for j in range(len(data_test_name)):
         print ('\nTesting dataset %s'%data_test_name[j])
         data_test = data_test_path + data_test_name[j] + '.txt'
-        solution, time = dqn.EvaluateRealData(model_file, data_test, save_dir, stepRatio)
+        solution, time, robustness = dqn.EvaluateRealData(model_file, data_test, save_dir, stepRatio)
         df.iloc[0,j] = time
-        print('Data:%s, time:%.2f'%(data_test_name[j], time))
+        df.iloc[1,j] = robustness
+        print('Data:%s, time:%.2f, score:%.2f'%(data_test_name[j], time, robustness))
     save_dir_local = save_dir + '/StepRatio_%.4f' % stepRatio
     if not os.path.exists(save_dir_local):
         os.mkdir(save_dir_local)
@@ -77,9 +78,9 @@ def EvaluateSolution(STEPRATIO, MODEL_FILE_CKPT, STRTEGYID):
 
 
 def main():
-    model_file_ckpt = 'nrange_30_50_iter_78000.ckpt'
+    model_file_ckpt = 'nrange_30_50_iter_399000_barabasi_albert.ckpt'
     GetSolution(0.01, model_file_ckpt)
-    EvaluateSolution(0.01, model_file_ckpt, 0)
+    # EvaluateSolution(0.01, model_file_ckpt, 0)
 
 
 
