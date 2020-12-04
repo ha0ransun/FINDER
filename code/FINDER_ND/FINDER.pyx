@@ -754,7 +754,7 @@ class FINDER:
         save_dir_local = save_dir+'/StepRatio_%.4f'%stepRatio
         if not os.path.exists(save_dir_local):#make dir
             os.mkdir(save_dir_local)
-        result_file = '%s/%s_%s' %(save_dir_local, test_name, method)
+        result_file = '%s/%s_%s' %(save_dir_local, method, test_name)
         g = nx.read_edgelist(data_test)
         g_test = g.copy()
         with open(result_file, 'w') as f_out:
@@ -768,12 +768,14 @@ class FINDER:
             #     step = 1
             # self.InsertGraph(g, is_test=True)
             t1 = time.time()
-            Robustness, solution = self.HXA(g, method=method)
+            solution = self.HXA(g, method=method)
             t2 = time.time()
             solution_time = (t2 - t1)
             for i in range(len(solution)):
                 f_out.write('%d\n' % solution[i])
-
+                
+            solutions = solution + list(set([int(n) for n in g_test.nodes()])^set(solution))
+            Robustness = self.utils.getRobustness(self.GenNetwork(g_test), solutions)
         # self.ClearTestGraphs()
         return solution, solution_time, Robustness
 
@@ -939,7 +941,7 @@ class FINDER:
             node = keys[maxTag]
             sol.append(int(node))
             G.remove_node(node)
-        solutions = sol + list(set([int(n) for n in g.nodes()])^set(sol))
+        # solutions = sol + list(set([int(n) for n in g.nodes()])^set(sol))
         # solutions = [int(i) for i in solution]
-        Robustness = self.utils.getRobustness(self.GenNetwork(g), solutions)
-        return Robustness, sol
+        # Robustness = self.utils.getRobustness(self.GenNetwork(g), solutions)
+        return sol # Robustness, sol
