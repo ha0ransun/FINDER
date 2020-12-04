@@ -12,18 +12,18 @@ import pickle as cp
 import random
 
 
-def GetSolution(STEPRATIO, MODEL_FILE):
+def GetSolution(STEPRATIO, MODEL_FILE, method='HDA'):
     ######################################################################################################################
     ##................................................Get Solution (model).....................................................
     dqn = FINDER()
     ## data_test
     data_test_path = '../../data/real/'
 #     data_test_name = ['Crime', 'HI-II-14', 'Digg', 'Enron', 'Gnutella31', 'Epinions', 'Facebook', 'Youtube', 'Flickr']
-    data_test_name = ['Crime', 'HI-II-14', 'Facebook']
+    data_test_name = ['Crime', 'HI-II-14']
     data_test_costType = ['degree', 'random']
-    model_file_path = './models/Model_barabasi_albert/'
-    model_file_ckpt = MODEL_FILE
-    model_file = model_file_path + model_file_ckpt
+    # model_file_path = './models/Model_barabasi_albert/'
+    # model_file_ckpt = MODEL_FILE
+    # model_file = model_file_path + model_file_ckpt
     ## save_dir
     save_dir = '../../results/FINDER_ND_cost/real/'
     if not os.path.exists(save_dir):
@@ -37,8 +37,8 @@ def GetSolution(STEPRATIO, MODEL_FILE):
         os.mkdir(save_dir_random)
 
     ## begin computing...
-    print('The best model is :%s' % (model_file))
-    dqn.LoadModel(model_file)
+    # print('The best model is :%s' % (model_file))
+    # dqn.LoadModel(model_file)
 
     for costType in data_test_costType:
         df = pd.DataFrame(np.arange(2 * len(data_test_name)).reshape((-1, len(data_test_name))), index=['time', 'score'],
@@ -49,9 +49,9 @@ def GetSolution(STEPRATIO, MODEL_FILE):
             print('Testing dataset %s' % data_test_name[j])
             data_test = data_test_path + data_test_name[j] + '_' + costType + '.gml'
             if costType == 'degree':
-                solution, time, robustness = dqn.EvaluateRealData(model_file, data_test, save_dir_degree, stepRatio)
+                solution, time, robustness = dqn.HeurRealData(data_test, save_dir_degree, stepRatio, method=method)
             elif costType == 'random':
-                solution, time, robustness = dqn.EvaluateRealData(model_file, data_test, save_dir_random, stepRatio)
+                solution, time, robustness = dqn.HeurRealData(data_test, save_dir_random, stepRatio, method=method)
             df.iloc[0, j] = time
             df.iloc[1, j] = robustness
             print('Data:%s, cost:%s, time:%.4f, score:%.4f'%(data_test_name[j], costType, time, robustness))
@@ -118,8 +118,10 @@ def GetSolution(STEPRATIO, MODEL_FILE):
 
 
 def main():
-    model_file = 'nrange_30_50_iter_399000_barabasi_albert.ckpt'
-    GetSolution(0.01, model_file)
+    model_file_ckpt = 'nrange_30_50_iter_399000_barabasi_albert.ckpt'
+    Methods = ['HDA', 'HPRA']
+    for method in Methods:
+        GetSolution(0.01, model_file_ckpt, method)
     # EvaluateSolution(0.01, 0)
 
 if __name__=="__main__":
