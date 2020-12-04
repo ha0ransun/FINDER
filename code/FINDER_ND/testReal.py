@@ -16,14 +16,14 @@ def GetSolution(STEPRATIO, MODEL_FILE_CKPT):
     ######################################################################################################################
     ##................................................Get Solution (model).....................................................
     dqn = FINDER()
-    data_test_path = '../data/real/'
+    data_test_path = '../../data/real/'
 #     data_test_name = ['Crime','HI-II-14','Digg','Enron','Gnutella31','Epinions','Facebook','Youtube','Flickr']
-    data_test_name = ['Crime','HI-II-14']
+    data_test_name = ['Crime','HI-II-14', 'Facebook']
     model_file_path = './models/Model_barabasi_albert/'
     model_file_ckpt = MODEL_FILE_CKPT
     model_file = model_file_path + model_file_ckpt
     ## save_dir
-    save_dir = '../results/FINDER_ND/real'
+    save_dir = '../../results/FINDER_ND/real'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
         
@@ -40,7 +40,7 @@ def GetSolution(STEPRATIO, MODEL_FILE_CKPT):
         solution, time, robustness = dqn.EvaluateRealData(model_file, data_test, save_dir, stepRatio)
         df.iloc[0,j] = time
         df.iloc[1,j] = robustness
-        print('Data:%s, time:%.2f, score:%.2f'%(data_test_name[j], time, robustness))
+        print('Data:%s, time:%.4f, score:%.4f'%(data_test_name[j], time, robustness))
     save_dir_local = save_dir + '/StepRatio_%.4f' % stepRatio
     if not os.path.exists(save_dir_local):
         os.mkdir(save_dir_local)
