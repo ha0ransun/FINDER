@@ -31,10 +31,10 @@ def GetSolution(STEPRATIO, MODEL_FILE_CKPT, method='HDA'):
     for j in range(len(data_test_name)):
         print ('\nTesting dataset %s'%data_test_name[j])
         data_test = data_test_path + data_test_name[j] + '.txt'
-        solution, time, robustness = dqn.HeurRealData(data_test, save_dir, stepRatio, method='HDA')
+        solution, time, robustness = dqn.HeurRealData(data_test, save_dir, stepRatio, method=method)
         df.iloc[0,j] = time
         df.iloc[1,j] = robustness
-        print('Data:%s, time:%.2f, score:%.2f'%(data_test_name[j], time, robustness))
+        print('Data:%s, time:%.4f, score:%.4f'%(data_test_name[j], time, robustness))
     save_dir_local = save_dir + '/StepRatio_%.4f' % stepRatio
     if not os.path.exists(save_dir_local):
         os.mkdir(save_dir_local)
