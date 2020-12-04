@@ -765,6 +765,7 @@ class FINDER:
             os.mkdir(save_dir_local)
         result_file = '%s/%s' %(save_dir_local, test_name)
         g = nx.read_edgelist(data_test)
+        g_test = g.copy()
         with open(result_file, 'w') as f_out:
             print ('testing')
             sys.stdout.flush()
@@ -782,8 +783,8 @@ class FINDER:
             for i in range(len(solution)):
                 f_out.write('%d\n' % solution[i])
 
-            solutions = solution + list(set([int(n) for n in g.nodes()])^set(solution))
-            Robustness = self.utils.getRobustness(self.GenNetwork(g), solutions)
+            solutions = solution + list(set([int(n) for n in g_test.nodes()])^set(solution))
+            Robustness = self.utils.getRobustness(self.GenNetwork(g_test), solutions)
         self.ClearTestGraphs()
         return solution, solution_time, Robustness
 
