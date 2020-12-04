@@ -864,6 +864,7 @@ class FINDER:
         result_file = '%s/%s' %(save_dir_local, test_name)
         # g = nx.read_edgelist(data_test)
         g = nx.read_gml(data_test)
+        g_test = g.copy()
         # g = self.Real2networkx(g_temp)
         with open(result_file, 'w') as f_out:
             print ('testing')
@@ -881,8 +882,44 @@ class FINDER:
             solution_time = (t2 - t1)
             for i in range(len(solution)):
                 f_out.write('%d\n' % solution[i])
+
+            solutions = solution + list(set([int(n) for n in g_test.nodes()])^set(solution))
+            Robustness = self.utils.getRobustness(self.GenNetwork(g_test), solutions)
         self.ClearTestGraphs()
-        return solution, solution_time
+        return solution, solution_time, Robustness
+
+
+    def HeurRealData(self, data_test, save_dir, stepRatio, method='HDA'):  #测试真实数据
+        cdef double solution_time = 0.0
+        test_name = data_test.split('/')[-1].replace('.gml','.txt')
+        save_dir_local = save_dir+'/StepRatio_%.4f'%stepRatio
+        if not os.path.exists(save_dir_local):#make dir
+            os.mkdir(save_dir_local)
+        result_file = '%s/%s_%s' %(save_dir_local, method, test_name)
+        g = nx.read_gml(data_test)
+        g_test = g.copy()
+        with open(result_file, 'w') as f_out:
+            print ('testing')
+            sys.stdout.flush()
+            print ('number of nodes:%d'%(nx.number_of_nodes(g)))
+            print ('number of edges:%d'%(nx.number_of_edges(g)))
+            # if stepRatio > 0:
+            #     step = np.max([int(stepRatio*nx.number_of_nodes(g)),1]) #step size
+            # else:
+            #     step = 1
+            # self.InsertGraph(g, is_test=True)
+            t1 = time.time()
+            solution = self.HXA(g, method=method)
+            t2 = time.time()
+            solution_time = (t2 - t1)
+            for i in range(len(solution)):
+                f_out.write('%d\n' % solution[i])
+                
+            solutions = solution + list(set([int(n) for n in g_test.nodes()])^set(solution))
+            Robustness = self.utils.getRobustness(self.GenNetwork(g_test), solutions)
+        # self.ClearTestGraphs()
+        return solution, solution_time, Robustness
+
 
     def EvaRealForModelSelect(self, model_file, data_test, stepRatio=0.0025):  #测试真实数据
         g = nx.read_gml(data_test)
@@ -1099,10 +1136,10 @@ class FINDER:
             node = keys[maxTag]
             sol.append(int(node))
             G.remove_node(node)
-        solutions = sol + list(set([int(n) for n in g.nodes()])^set(sol))
+        # solutions = sol + list(set([int(n) for n in g.nodes()])^set(sol))
         # solutions = [int(i) for i in solution]
-        Robustness = self.utils.getRobustness(self.GenNetwork(g), solutions)
-        return Robustness, sol
+        # Robustness = self.utils.getRobustness(self.GenNetwork(g), solutions)
+        return sol # return Robustness, sol
 
     def Real2networkx(self, G):
         cc = sorted(nx.connected_components(G), key=len, reverse=True)
