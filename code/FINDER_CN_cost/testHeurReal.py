@@ -49,12 +49,12 @@ def GetSolution(STEPRATIO, MODEL_FILE, method='HDA'):
             print('Testing dataset %s' % data_test_name[j])
             data_test = data_test_path + data_test_name[j] + '_' + costType + '.gml'
             if costType == 'degree':
-                solution, time, robustness = dqn.HeurRealData(data_test, save_dir, stepRatio, method=method)
+                solution, time, robustness = dqn.HeurRealData(data_test, save_dir_degree, stepRatio, method=method)
             elif costType == 'random':
-                solution, time, robustness = dqn.HeurRealData(data_test, save_dir, stepRatio, method=method)
+                solution, time, robustness = dqn.HeurRealData(data_test, save_dir_random, stepRatio, method=method)
             df.iloc[0, j] = time
             df.iloc[1, j] = robustness
-            print('Data:%s, cost:%s, time:%.2f, score:%.2f'%(data_test_name[j], costType, time, robustness))
+            print('Data:%s, cost:%s, time:%.4f, score:%.4f'%(data_test_name[j], costType, time, robustness))
         if costType == 'degree':
             save_dir_local = save_dir_degree + '/StepRatio_%.4f' % stepRatio
         elif costType == 'random':
@@ -66,60 +66,62 @@ def GetSolution(STEPRATIO, MODEL_FILE, method='HDA'):
         print('model has been tested!')
 
 
-def EvaluateSolution(STEPRATIO, STRTEGYID):
-    #######################################################################################################################
-    ##................................................Evaluate
-    dqn = FINDER()
-    ## data_test
-    data_test_path = '../data/real/Cost/'
-#     data_test_name = ['Crime', 'HI-II-14', 'Digg', 'Enron', 'Gnutella31', 'Epinions', 'Facebook', 'Youtube', 'Flickr']
-    data_test_name = ['Crime', 'HI-II-14']
-    data_test_costType = ['degree', 'random']
+# def EvaluateSolution(STEPRATIO, STRTEGYID):
+#     #######################################################################################################################
+#     ##................................................Evaluate
+#     dqn = FINDER()
+#     ## data_test
+#     data_test_path = '../data/real/Cost/'
+# #     data_test_name = ['Crime', 'HI-II-14', 'Digg', 'Enron', 'Gnutella31', 'Epinions', 'Facebook', 'Youtube', 'Flickr']
+#     data_test_name = ['Crime', 'HI-II-14']
+#     data_test_costType = ['degree', 'random']
 
-    ## save_dir
-    save_dir_degree = '../results/FINDER_CN_cost/real/Data_degree/StepRatio_%.4f/' % STEPRATIO
-    save_dir_random = '../results/FINDER_CN_cost/real/Data_random/StepRatio_%.4f/' % STEPRATIO
-    ## begin computing...
+#     ## save_dir
+#     save_dir_degree = '../results/FINDER_CN_cost/real/Data_degree/StepRatio_%.4f/' % STEPRATIO
+#     save_dir_random = '../results/FINDER_CN_cost/real/Data_random/StepRatio_%.4f/' % STEPRATIO
+#     ## begin computing...
 
-    for costType in data_test_costType:
-        df = pd.DataFrame(np.arange(2 * len(data_test_name)).reshape((2, len(data_test_name))),
-                          index=['solution', 'time'], columns=data_test_name)
-        for i in range(len(data_test_name)):
-            print('Evaluating dataset %s' % data_test_name[i])
-            data_test = data_test_path + data_test_name[i] + '_' + costType + '.gml'
-            if costType == 'degree':
-                solution = save_dir_degree + data_test_name[i] + '_degree.txt'
-            elif costType == 'random':
-                solution = save_dir_random + data_test_name[i] + '_random.txt'
+#     for costType in data_test_costType:
+#         df = pd.DataFrame(np.arange(2 * len(data_test_name)).reshape((2, len(data_test_name))),
+#                           index=['solution', 'time'], columns=data_test_name)
+#         for i in range(len(data_test_name)):
+#             print('Evaluating dataset %s' % data_test_name[i])
+#             data_test = data_test_path + data_test_name[i] + '_' + costType + '.gml'
+#             if costType == 'degree':
+#                 solution = save_dir_degree + data_test_name[i] + '_degree.txt'
+#             elif costType == 'random':
+#                 solution = save_dir_random + data_test_name[i] + '_random.txt'
 
-            t1 = time.time()
-            # strategyID: 0:no insert; 1:count; 2:rank; 3:multiply
-            ################################## modify to choose which strategy to evaluate
-            strategyID = STRTEGYID
-            score, MaxCCList, solution = dqn.EvaluateSol(data_test, solution, strategyID, reInsertStep=20)
-            t2 = time.time()
-            df.iloc[0, i] = score
-            df.iloc[1, i] = t2 - t1
-            if costType == 'degree':
-                result_file = save_dir_degree + '/MaxCCList__Strategy_' + data_test_name[i] + '.txt'
-            elif costType == 'random':
-                result_file = save_dir_random + '/MaxCCList_Strategy_' + data_test_name[i] + '.txt'
+#             t1 = time.time()
+#             # strategyID: 0:no insert; 1:count; 2:rank; 3:multiply
+#             ################################## modify to choose which strategy to evaluate
+#             strategyID = STRTEGYID
+#             score, MaxCCList, solution = dqn.EvaluateSol(data_test, solution, strategyID, reInsertStep=20)
+#             t2 = time.time()
+#             df.iloc[0, i] = score
+#             df.iloc[1, i] = t2 - t1
+#             if costType == 'degree':
+#                 result_file = save_dir_degree + '/MaxCCList__Strategy_' + data_test_name[i] + '.txt'
+#             elif costType == 'random':
+#                 result_file = save_dir_random + '/MaxCCList_Strategy_' + data_test_name[i] + '.txt'
 
-            with open(result_file, 'w') as f_out:
-                for j in range(len(MaxCCList)):
-                    f_out.write('%.8f\n' % MaxCCList[j])
+#             with open(result_file, 'w') as f_out:
+#                 for j in range(len(MaxCCList)):
+#                     f_out.write('%.8f\n' % MaxCCList[j])
 
-            print('Data:%s, score:%.6f!' % (data_test_name[i], score))
+#             print('Data:%s, score:%.6f!' % (data_test_name[i], score))
 
-        if costType == 'degree':
-            df.to_csv(save_dir_degree + '/solution_%s_score.csv' % (costType), encoding='utf-8', index=False)
-        elif costType == 'random':
-            df.to_csv(save_dir_random + '/solution_%s_score.csv' % (costType), encoding='utf-8', index=False)
+#         if costType == 'degree':
+#             df.to_csv(save_dir_degree + '/solution_%s_score.csv' % (costType), encoding='utf-8', index=False)
+#         elif costType == 'random':
+#             df.to_csv(save_dir_random + '/solution_%s_score.csv' % (costType), encoding='utf-8', index=False)
 
 
 def main():
-    model_file = 'nrange_30_50_iter_399000_barabasi_albert.ckpt'
-    GetSolution(0.01, model_file)
+    model_file_ckpt = 'nrange_30_50_iter_399000_barabasi_albert.ckpt'
+    Methods = ['HDA', 'HPRA']
+    for method in Methods:
+        GetSolution(0.01, model_file_ckpt, method)
     # EvaluateSolution(0.01, 0)
 
 if __name__=="__main__":
