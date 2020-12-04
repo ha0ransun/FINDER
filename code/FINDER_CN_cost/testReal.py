@@ -23,7 +23,7 @@ def GetSolution(STEPRATIO, MODEL_FILE):
     data_test_costType = ['degree', 'random']
     model_file_path = './models/Model_barabasi_albert/'
     model_file_ckpt = MODEL_FILE
-    model_file = model_file_path + model_file_ckpt
+    # model_file = model_file_path + model_file_ckpt
     ## save_dir
     save_dir = '../../results/FINDER_CN_cost/real/'
     if not os.path.exists(save_dir):
@@ -37,10 +37,11 @@ def GetSolution(STEPRATIO, MODEL_FILE):
         os.mkdir(save_dir_random)
 
     ## begin computing...
-    print('The best model is :%s' % (model_file))
-    dqn.LoadModel(model_file)
 
     for costType in data_test_costType:
+        model_file = model_file_path + f'nrange_30_50_iter_226500_barabasi_albert_{costType}.ckpt'
+        print('The best model is :%s' % (model_file))
+        dqn.LoadModel(model_file)
         df = pd.DataFrame(np.arange(2 * len(data_test_name)).reshape((-1, len(data_test_name))), index=['time', 'score'],
                           columns=data_test_name)
         #################################### modify to choose which stepRatio to get the solution
@@ -118,7 +119,7 @@ def GetSolution(STEPRATIO, MODEL_FILE):
 
 
 def main():
-    model_file = 'nrange_30_50_iter_399000_barabasi_albert.ckpt'
+    model_file = 'nrange_30_50_iter_300000_barabasi_albert.ckpt'
     GetSolution(0.01, model_file)
     # EvaluateSolution(0.01, 0)
 
