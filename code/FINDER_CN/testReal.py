@@ -25,7 +25,7 @@ def GetSolution(STEPRATIO, MODEL_FILE_CKPT):
     ## begin computing...
     print ('The best model is :%s'%(model_file))
     dqn.LoadModel(model_file)
-    df = pd.DataFrame(np.arange(1*len(data_test_name)).reshape((1,len(data_test_name))),index=['time', 'score'], columns=data_test_name)
+    df = pd.DataFrame(np.arange(2*len(data_test_name)).reshape((-1,len(data_test_name))),index=['time', 'score'], columns=data_test_name)
     #################################### modify to choose which stepRatio to get the solution
     stepRatio = STEPRATIO
     for j in range(len(data_test_name)):
