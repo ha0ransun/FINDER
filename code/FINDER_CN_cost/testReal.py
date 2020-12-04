@@ -17,13 +17,15 @@ def GetSolution(STEPRATIO, MODEL_FILE):
     ##................................................Get Solution (model).....................................................
     dqn = FINDER()
     ## data_test
-    data_test_path = '../data/real/Cost/'
+    data_test_path = '../../data/real/'
 #     data_test_name = ['Crime', 'HI-II-14', 'Digg', 'Enron', 'Gnutella31', 'Epinions', 'Facebook', 'Youtube', 'Flickr']
-    data_test_name = ['Crime', 'HI-II-14']
+    data_test_name = ['Crime', 'HI-II-14', 'Facebook']
     data_test_costType = ['degree', 'random']
-    model_file = './FINDER_CN_cost/models/%s'%MODEL_FILE
+    model_file_path = './models/Model_barabasi_albert/'
+    model_file_ckpt = MODEL_FILE
+    model_file = model_file_path + model_file_ckpt
     ## save_dir
-    save_dir = '../results/FINDER_CN_cost/real/'
+    save_dir = '../../results/FINDER_CN_cost/real/'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
     
@@ -37,7 +39,7 @@ def GetSolution(STEPRATIO, MODEL_FILE):
     dqn.LoadModel(model_file)
 
     for costType in data_test_costType:
-        df = pd.DataFrame(np.arange(1 * len(data_test_name)).reshape((1, len(data_test_name))), index=['time'],
+        df = pd.DataFrame(np.arange(2 * len(data_test_name)).reshape((-1, len(data_test_name))), index=['time', 'score'],
                           columns=data_test_name)
         #################################### modify to choose which stepRatio to get the solution
         stepRatio = STEPRATIO
@@ -45,11 +47,12 @@ def GetSolution(STEPRATIO, MODEL_FILE):
             print('Testing dataset %s' % data_test_name[j])
             data_test = data_test_path + data_test_name[j] + '_' + costType + '.gml'
             if costType == 'degree':
-                solution, time = dqn.EvaluateRealData(model_file, data_test, save_dir_degree, stepRatio)
+                solution, time, robustness = dqn.EvaluateRealData(model_file, data_test, save_dir_degree, stepRatio)
             elif costType == 'random':
-                solution, time = dqn.EvaluateRealData(model_file, data_test, save_dir_random, stepRatio)
+                solution, time, robustness = dqn.EvaluateRealData(model_file, data_test, save_dir_random, stepRatio)
             df.iloc[0, j] = time
-
+            df.iloc[1, j] = robustness
+            print('Data:%s, cost:%s, time:%.2f, score:%.2f'%(data_test_name[j], costType, time, robustness))
         if costType == 'degree':
             save_dir_local = save_dir_degree + '/StepRatio_%.4f' % stepRatio
         elif costType == 'random':
@@ -113,9 +116,9 @@ def EvaluateSolution(STEPRATIO, STRTEGYID):
 
 
 def main():
-    model_file = 'nrange_30_50_iter_122100.ckpt'
+    model_file = 'nrange_30_50_iter_399000_barabasi_albert.ckpt'
     GetSolution(0.01, model_file)
-    EvaluateSolution(0.01, 0)
+    # EvaluateSolution(0.01, 0)
 
 if __name__=="__main__":
     main()
